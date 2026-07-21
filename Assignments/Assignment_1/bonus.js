@@ -6,7 +6,7 @@ var createCounter = function(init) {
             return ++counter ;
         },
         decrement(){
-            return --countergit ;
+            return --counter ;
         },
         reset(){
             return counter = init;
