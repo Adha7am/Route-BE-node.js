@@ -1,0 +1,93 @@
+q1.
+
+The difference between forEach and forof:-
+forEach is an array method. It works with array-like objects. it only works with arrays, and array-like objects,
+great for performing an action on every element, But it cannot use break or continue, and it doesn't work well with asynchronous code.
+So, if we iterate on an array,
+and we use forEach , if you want the loop to stop early, it won't stop. It will only exit the callback. It doesn't stop the loop.
+Now, for...Of is a language statement, so it works with any iterable object [ array, string, map, set ].
+And it supports break and continue,
+and it works naturally with asynchronous code and with await.
+So, if we want to stop the loop early, and we want to use break or continue, it will do that fine with no problems.
+And if we want to await some asynchronous code, it will wait for it to finish.
+When to use?
+well, I would use forEach if I want to perform an action on every element, and I don't want to stop the loop early, and my code is synchronous.
+On the other hand, if I want to use break and continue, and if i have asynchronous code and I want to await it, I will definitely use for...Of.
+
+//----------------------------------------------------------------------------
+
+q2.
+
+hoisting and temporal dead zone :- 
+Hoisting means that JavaScript scans the code before running and creates memory for declarations.
+It doesn't actually mean that it raises the declarations to the top of the code.
+That doesn't actually happen. What happens is that JavaScript sees the variables and functions that you have created, 
+and it declares them or creates memory for the declarations.
+Now, there is a couple of differences with functions and variables when they are being hoisted.
+So, for example, a var variable is hoisted and initialized to undefined. And let and const are hoisted,
+but they remain inaccessible in the temporal dead zone until execution reaches their declarations.
+there is a huge misconception that let and const are not hoisted.
+No, they are hoisted, but they remain in the temporal dead zone before the execution reaches their declaration in the code.
+Temporal Dead Zone is the time after declaration but before initialization.
+
+{
+    console.log(name); // ReferenceError <== Temporal Dead Zone
+
+    let name = "Ahmed"; // <== initialized (Exits the Temporal Dead Zone )
+
+    console.log(name); // "Ahmed"
+}
+
+So, in case of var variables, there is no TDZ because they are initialized with undefined as soon as the are declared.
+let, and const variablees enter the TDZ before initialization.
+Also, declaration functions are hoisted, and they are hoisted and fully initialized in the same line during hoisting.
+And, that's why you can call a function before the line where it's written in.
+
+{
+    hello(); // <== works because functions are hoisted( decalred and initialized before execution ) 
+
+    function hello() {
+        console.log("Hello");
+    }
+}
+
+Now, for expression functions, it doesn't work like that because expression functions is essentially a variable, and when hoisting,
+if it's a var variable, hoisting will declare it and initialize it to undefined. And if it is a let and const variable, it will remain in the temporal dead zone before reaching the function declaration.
+
+//----------------------------------------------------------------------------
+
+q3.
+
+The loose equality operator and the strict equality operator:-
+The loose equality operator ( == ) compares two values after applying coercion rules if necessary.
+So, this means that values of different data types might be compared as equal, which evaluates to true.
+While the strict equality operator ( === ) compares both type and value without performing type coercion. 
+So, for non-primitive data types, objects, arrays, and functions, it compares references, not contents.
+this means that two separate objects with identical values or identical properties are not equal because they have different addresses or different locations in memory. 
+While two variables that reference the same object are equal.
+
+//----------------------------------------------------------------------------
+
+q4.
+
+Try and catch is a JavaScript handling mechanism that handles errors.
+We place the code that might throw an error in the try block, and we place the error handling code in the catch block.
+So it makes error handling more easier and graceful, and without letting the program crash.
+And in asynchronous code, try and catch is very crucial because when we use async and await,
+the rejected promise is handled as an error. So when we wrap the await calls in try and catch blocks, 
+it allows you to handle the network failures or the unexpected errors more cleanly and in a readable way.
+
+//----------------------------------------------------------------------------
+
+q5.
+Coercion and conversion :-
+they both change a value from one data type to another, but the difference is who initiates that change.
+For coercion, which is implicit conversion, when JavaScript automatically changes the data type.
+{
+    let result = "5" + 3;
+    console.log(result); // "53"
+}
+And for conversion, it's when we use constructors or functions to explicitly convert a value from one data type to another.
+{
+    Number("123");      // 123
+}
