@@ -1,0 +1,30 @@
+q1 : What is the Node.js Event Loop?
+Since Node JS is single threaded.
+The envelope is how it handles blocking operations by delegating these operations to the LibUV thread pool  or the operating system kernel.
+The event loop is what checks if the call stack is empty and if it is,
+it executes whatever is in the event queue, prioritizing microtasks.
+
+q2: What is Libuv and What Role Does It Play in Node.js?
+libuv is the c library that node Js uses to handle operations like async I/O operations, dns, crypto, and compressions.
+
+q3: How Does Node.js Handle Asynchronous Operations Under the Hood?
+Since Node JS uses only a one single thread, a main thread,
+the way it handles asynchronous code it's by delegating it to the operating system or the libuv's thread pool so that under the hood,
+it executes the blocking operation so that the main thread doesn't get blocked.
+After finishing the blocking operation, it usually is handled by a callback or a promise , So it's either in the macrotask queue or in the microtask queue,
+but either way, it is in the event queue, and the event loop checks the call stack if it's empty and if it is, it executes the callback or the resolve function.
+
+q4: What is the Difference Between the Call Stack, Event Queue, and Event Loop in Node.js?
+callstack is what Node JS uses to manage and track function executions.
+The event queue is where callbacks and promise resolves or rejects are registered after their async operation is done.
+The event queue is divided into microtasks, and macrotasks.
+after emptying the microtasks, the macrotasks. Start executing. 
+the event loop is what checks the call stack if it's empty so that, microtests can start executing.
+
+q5: What is the Node.js Thread Pool and How to Set the Thread Pool Size?
+The thread pool is a pool of worker threads provided by libuv so that Node GS can offload some operations to these threads.
+the default size is 4 threads and you can chage it via the UV_THREADPOOL_SIZE environment variable.
+
+q6: How Does Node.js Handle Blocking and Non-Blocking Code Execution?
+Node.js handles blocking corporations by freezing the main thread and waiting until the blocking operation is finished. 
+While nonblocking corporations are delegated to the operating system kernel or to a worker thread so that the main threat is not blocked.
