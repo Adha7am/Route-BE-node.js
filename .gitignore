@@ -1,6 +1,4 @@
 main2.js
 node_modules/
-.env 
+*.env 
 .idea/
-env
-idea/
