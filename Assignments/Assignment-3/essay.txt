@@ -23,7 +23,7 @@ the event loop is what checks the call stack if it's empty so that, microtests c
 
 q5: What is the Node.js Thread Pool and How to Set the Thread Pool Size?
 The thread pool is a pool of worker threads provided by libuv so that Node GS can offload some operations to these threads.
-the default size is 4 threads and you can chage it via the UV_THREADPOOL_SIZE environment variable.
+the default size is 4 threads and you can change it via the UV_THREADPOOL_SIZE environment variable.
 
 q6: How Does Node.js Handle Blocking and Non-Blocking Code Execution?
 Node.js handles blocking corporations by freezing the main thread and waiting until the blocking operation is finished. 

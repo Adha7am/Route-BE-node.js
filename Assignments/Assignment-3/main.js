@@ -35,8 +35,6 @@ app.post('/user', async (req, res) => {
 //PATCH User by Id
 app.patch("/user/:id", async (req, res) => {
     const { age, name, email } = req.body
-
-
     let users = await readUsers();
 
     const userIndex = users.findIndex((u) => u.id == req.params.id)
@@ -58,11 +56,9 @@ app.patch("/user/:id", async (req, res) => {
 app.delete("/user/:id", async (req, res) => {
 
     let users = await readUsers()
-
     const userExists = users.find((u) => u.id == req.params.id)
 
     if (!userExists) { throw new Error("User Id Does not Exist", { "cause": 404 }) }
-
 
     users = users.filter((u) => u.id != req.params.id)
     await WriteToUsers(users)
