@@ -1,7 +1,17 @@
-main2.js
+# Node.js dependencies
 node_modules/
-*.env 
-*/.idea/
-**/.idea/
-.idea
-Assignments/.idea/
+
+# Environment files
+.env
+.env.*
+*.env
+
+# IDE settings
+.idea/
+
+# Files to exclude
+main2.js
+frontend.zip
+
+# Projects to exclude
+Ecommerce-app/
