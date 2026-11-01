@@ -1,7 +1,7 @@
 import { toMs } from "../../pkg/utils/time.js";
 import { cacheProvider } from "./init.js";
 
-export async function withCache (ttl = toMs.hours(1)) {
+export function withCache (ttl = toMs.hours(1)) {
     return async (req, res, next) => {
 
         let key = `${req.method} : ${req.originalUrl}`;
@@ -21,7 +21,7 @@ export async function withCache (ttl = toMs.hours(1)) {
         res.json = async (body) => {
             //cache the body
             await cacheProvider.set(key, JSON.stringify(body), ttl)
-                
+
             //send the response
             res.setHeader('X-Cache', 'MISS')
             return originalJson(body)
