@@ -1,3 +1,0 @@
-CREATE TABLE User{
-    Id SERIAL PRIMARY KEY
-}

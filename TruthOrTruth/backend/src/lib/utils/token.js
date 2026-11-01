@@ -1,0 +1,6 @@
+import jwt from 'jsonwebtoken'
+import { toMs } from '../pkg/utils/time.js'
+
+export function generateToken(payload) {
+    return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: toMs.hours(1) })
+}

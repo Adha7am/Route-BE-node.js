@@ -1,0 +1,23 @@
+# ##health
+# GET  http://127.0.0.1:3000/auth/health 
+# Content-Type: none
+
+
+
+# ##send-otp
+# POST http://127.0.0.1:3000/auth/send-otp
+# Content-Type: application/json
+
+# {
+#     "email": "adhamwael047w@gmail.com"
+# }
+
+##rese-pass
+PATCH http://127.0.0.1:3000/auth/reset-password
+Content-Type: application/json
+
+{
+    "email" : "adhamwael047w@gmail.com",
+    "newPassword" : "888",
+    "code" : "725280"
+}

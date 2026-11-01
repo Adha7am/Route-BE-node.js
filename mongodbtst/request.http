@@ -1,0 +1,8 @@
+### create product
+POST http://127.0.0.1:3000/product
+Content-Type: application/json
+
+{
+    "name" : "ka3b 3aly",
+    "price" : "not much"
+}

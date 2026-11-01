@@ -12,6 +12,7 @@ node_modules/
 # Files to exclude
 main2.js
 frontend.zip
+*.md
 
 # Projects to exclude
 Ecommerce-app/
