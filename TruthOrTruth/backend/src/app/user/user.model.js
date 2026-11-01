@@ -44,7 +44,7 @@ const userSchema = new Schema({
 
 //remove the password field whenever the user document is parsed
 userSchema.set('toJSON', {
-    transformm: (doc, ret) => {
+    transform: (doc, ret) => {
         delete ret.password
         return ret
     }

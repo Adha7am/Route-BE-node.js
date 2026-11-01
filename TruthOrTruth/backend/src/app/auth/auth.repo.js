@@ -6,11 +6,12 @@ export function checkHealth() {
 }
 
 export async function createOtp(data) {
-    return await Otp.create(data)
+    const {code, email, expiresAt} = data
+    return await Otp.create({ code: code, email: email, expiresAt: expiresAt || (new Date(Date.now() + toMs.minutes(10))) })
 }
 
 export async function findOtp(email) {
-    return await Otp.findOne({ email })
+    return await Otp.findOne({ email, expiresAt: { $gt: new Date() } }) 
 }
 
 export async function deleteOtp(email) {

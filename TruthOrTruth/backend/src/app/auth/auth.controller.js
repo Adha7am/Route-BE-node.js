@@ -1,3 +1,4 @@
+import {logger} from '../../pkg/logger/logger.js'
 import { toMs } from "../../pkg/utils/time.js";
 import { validateBody } from "../../pkg/validation/validation.js";
 import { loginDTO, registerDTO, resetPasswordDTO, sendOtpDTO, verifyUserDTO } from "./auth.dto.js";
@@ -20,7 +21,7 @@ export async function register(req, res, next) {
     try {
 
         const data = validateBody(registerDTO, req.body)
-        console.log(data);
+        logger.info('validated body : ',data);
 
         const user = await authService.register(data)
 
@@ -59,7 +60,12 @@ export async function login(req, res, next) {
         const { email, password } = data
 
         const token = await authService.login(email, password)
-        res.cookie('access-token', token, { httpOnly: true, maxAge: 1000 * 60 * 60 })
+        res.cookie('access-token', token, {
+            httpOnly: true,
+            maxAge: toMs.hours(1),
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        })
 
         res.status(200).json({
             message: "logged in successfully",
@@ -100,8 +106,10 @@ export async function resetPassword(req, res, next) {
 export async function loginWithGoogle(req, res, next) {
     try {
         const { token, statusCode } = await authService.loginWithGoogle(req.body.credential)
-        res.cookie('access_token', token, {
+        res.cookie('access-token', token, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
             maxAge: toMs.hours(1)
         })
 

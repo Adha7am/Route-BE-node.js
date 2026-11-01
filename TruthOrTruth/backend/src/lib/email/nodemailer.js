@@ -1,17 +1,18 @@
 import nodemailer from 'nodemailer'
+import { env } from '../config/env.js'
 
  const transporter = nodemailer.createTransport({
         service : 'gmail',
         auth : {
-            user : process.env.NODEMAILER_EMAIL,
-            pass : process.env.NODEMAILER_PASS
+            user :env.nodemailer.user,
+            pass : env.nodemailer.password
         }
     })
 
-export function sendEmail(to, subject, html){
+export async function sendEmail(to, subject, html){
    
 
-    transporter.sendMail({
+    return await transporter.sendMail({
         from : `"Truth Or Truth" <${process.env.NODEMAILER_EMAIL}>` ,
         to : to,
         subject : subject,

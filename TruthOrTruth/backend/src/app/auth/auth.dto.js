@@ -3,9 +3,9 @@ import * as z from 'zod'
 export const registerDTO = z.object({
     name: z.string().trim().min(3).max(20),
     email: z.email().trim().toLowerCase(),
-    password: z.string().trim().min(8).max(16),
+    password: z.string().min(8).max(16),
     gender: z.enum(['male', 'female', 'unknown']).default('unknown'),
-    dob: z.date().optional()
+    dob: z.coerce.date().max(new Date(), "Date of birth cannot be in the future").optional()
 })
 
 export const loginDTO = z.object({

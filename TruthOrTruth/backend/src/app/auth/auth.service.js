@@ -1,16 +1,14 @@
 import { sendEmail } from '../../lib/email/nodemailer.js'
 import * as userRepo from '../user/user.repo.js'
 import * as authRepo from './auth.repo.js'
-import bcrypt from 'bcrypt'
-import crypto from 'node:crypto'
-import jwt from 'jsonwebtoken'
-import { getUserOrThrow, assertUserDoesNotExist } from '../../lib/utils/user.helper.js'
-import { userAlreadyExists, userAlreadyVerified, userNotVerified } from '../user/user.errors.js'
-import { expiredOtp, invalidCreds, invalidOtp } from './auth.errors.js'
+import { getUserOrThrow, assertUserDoesNotExist } from '../user/user.helper.js'
+import { userAlreadyExists, userAlreadyVerified, userNotVerified } from '../../lib/error/user.errors.js'
+import { expiredOtp, invalidCreds, invalidOtp } from '../../lib/error/auth.errors.js'
 import { comparePassword, hashPassword } from '../../pkg/utils/hash.js'
-import { toMs } from '../../pkg/utils/time.js'
 import { generateToken } from '../../lib/utils/token.js'
 import { verifyGoogleToken } from '../../lib/utils/googleAuth.js'
+import { generateOtp } from '../../pkg/utils/crypto.js'
+import { logger } from '../../pkg/logger/logger.js'
 
 export function checkHealth() {
     const dbConnected = authRepo.checkHealth()
@@ -29,9 +27,9 @@ export async function register(userData) {
     userData.password = await hashPassword(userData.password)
 
     //create user
-    let  user;
+    let user;
     try {
-         user = await userRepo.createUser(userData)
+        user = await userRepo.createUser(userData)
     } catch (error) {
         //catches MongoDB duplicated-key error [race condition]
         if (error.code === 11000) {
@@ -42,13 +40,18 @@ export async function register(userData) {
     }
 
     //verify user email [send otp]
-    const otp = crypto.randomInt(0, 999999).toString().padStart(6, '0')
+
+    //generate otp 
+    const otp = generateOtp();
+
+    //force delete every otp to this user before creating a new one
+    await authRepo.deleteOtp(email)
 
     //save otp into db
-    await authRepo.createOtp({ code: otp, email: userData.email, expiresAt: Date.now() + 1000 * 60 * 5 })
+    await authRepo.createOtp({ code: otp, email: userData.email })
 
     //send the otp email
-    sendEmail(userData.email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
+    await sendEmail(userData.email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
 
     return user
 }
@@ -97,14 +100,14 @@ export async function sendOtp(email) {
 
     //check that user Exists AND throw if it does not
     await getUserOrThrow(email)
-    //generate otp /*TODO*/ dependency inversion
-    const otp = crypto.randomInt(0, 999999).toString().padStart(6, '0')
+    //generate otp 
+    const otp = generateOtp();
 
     //save otp into db
-    await authRepo.createOtp({ code: otp, email: email, expiresAt: new Date(Date.now() + toMs.days(1)) })
+    await authRepo.createOtp({ code: otp, email: email })
 
     //send the otp email
-    sendEmail(email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
+    await sendEmail(email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
 }
 
 export async function resetPassword(email, newPassword, otpCode) {
@@ -125,7 +128,7 @@ export async function resetPassword(email, newPassword, otpCode) {
 export async function loginWithGoogle(idToken) {
     //verify idToken is from google
     const payload = await verifyGoogleToken(idToken)
-    console.log( payload);
+    logger.info('google Token payload : ', payload);
 
     // if user exists return the token
     const user = await userRepo.findUserByEmail(payload.email)
@@ -136,7 +139,7 @@ export async function loginWithGoogle(idToken) {
             id: user._id,
             email: user.email
         })
-        return {token : token , statusCode : 200}
+        return { token: token, statusCode: 200 }
     }
     //if not, create user
     const newUser = await userRepo.createUser({
@@ -147,7 +150,7 @@ export async function loginWithGoogle(idToken) {
     })
 
     //generate token
-    const token =  generateToken({ id: newUser._id, email: newUser.email })
-    return {token : token , statusCode : 201}
+    const token = generateToken({ id: newUser._id, email: newUser.email })
+    return { token: token, statusCode: 201 }
 
 }
