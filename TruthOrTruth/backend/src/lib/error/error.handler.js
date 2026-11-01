@@ -1,3 +1,5 @@
+import { logger } from "../../pkg/logger/logger.js";
+
 export const globalErrorHandler = (err, _req, res, _next) => {
 
     //remove at production !!

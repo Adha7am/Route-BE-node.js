@@ -1,4 +1,4 @@
-import { AppError } from "../../pkg/error/AppError.js"
+import { AppError } from "../../lib/error/AppError.js"
 
 export const expiredOtp = new AppError('OTP Expired, request new OTP', 404)//404
 export const invalidOtp = new AppError('Invalid OTP', 404)//403

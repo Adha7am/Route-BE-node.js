@@ -1,7 +1,7 @@
 import {Router} from 'express'
-import authRouter from './app/auth/auth.route'
-import userRouter from './app/user/user.route'
-import messageRouter from './app/message/message.route'
+import authRouter from './app/auth/auth.route.js'
+import userRouter from './app/user/user.route.js'
+import messageRouter from './app/message/message.route.js'
 
 export const router = new Router()
 
