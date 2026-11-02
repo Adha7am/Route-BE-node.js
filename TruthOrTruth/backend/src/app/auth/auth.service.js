@@ -9,11 +9,12 @@ import { generateToken } from '../../lib/utils/token.js'
 import { verifyGoogleToken } from '../../lib/utils/googleAuth.js'
 import { generateOtp } from '../../pkg/utils/crypto.js'
 import { logger } from '../../pkg/logger/logger.js'
+import { AppError } from '../../lib/error/AppError.js'
 
 export function checkHealth() {
     const dbConnected = authRepo.checkHealth()
 
-    if (!dbConnected) throw new Error('not connected')
+    if (!dbConnected) throw new AppError('DataBase connection failure', 500)
 
     return
 }

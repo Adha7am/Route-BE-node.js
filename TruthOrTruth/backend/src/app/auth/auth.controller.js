@@ -9,7 +9,7 @@ export function checkHealth(req, res, next) {
         authService.checkHealth()
 
         res.status(200).json({
-            message: "database connected",
+            message: "database connected successfully",
             success: true,
         })
     } catch (error) {
