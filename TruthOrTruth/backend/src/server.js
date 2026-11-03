@@ -47,7 +47,7 @@ async function shutdown(signal) {
 
         // const results = await Promise.allSettled([
         //     mongoose.disconnect(),
-        //     redis.quit(),
+        //     cacheProvider.client.quit(),
         // ]);
 
         // results.forEach((r) => {

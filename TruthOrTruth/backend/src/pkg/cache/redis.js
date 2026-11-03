@@ -23,7 +23,7 @@ export class RedisCacheProvider{
     }
 
     async get(key){
-        return this.client.emit(key)
+        return this.client.get(key)
     }
 
     async del(key){
