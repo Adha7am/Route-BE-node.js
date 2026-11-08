@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors'
 import { globalErrorHandler } from './lib/error/error.handler.js';
 import { router } from './route.js';
+import { correlationId } from './lib/correlationID/correlationId.js';
 
 //app
 export function createApp() {
@@ -15,6 +16,9 @@ export function createApp() {
 
     //parsing every response body
     app.use(express.json())
+
+    //Attach a correlationId
+    app.use(correlationId)
 
     //routes
     app.use('/api', router)

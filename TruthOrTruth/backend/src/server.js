@@ -44,18 +44,6 @@ async function shutdown(signal) {
             process.exitCode = 1;
         }
 
-
-        // const results = await Promise.allSettled([
-        //     mongoose.disconnect(),
-        //     cacheProvider.client.quit(),
-        // ]);
-
-        // results.forEach((r) => {
-        //     if (r.status === 'rejected') {
-        //         logger.error('Failed to close a dependency', r.reason);
-        //         process.exitCode = 1;
-        //     }
-        // });
     });
 }
 
