@@ -7,7 +7,6 @@ export function withCache(ttl = 3600) {
         //to only cache get requests
         if (req.method !== 'GET') next();
         let key = `${req.method} : ${req.originalUrl}`;
-        throw new AppError('a7a')
         //check for cached
           const cached = await cacheProvider.get(key).catch((err) => logger.error("cache read failed", err))
 
@@ -20,11 +19,11 @@ export function withCache(ttl = 3600) {
         const originalJson = res.json.bind(res);
 
         //interceptor
-        res.json = async (body) => {
+        res.json = (body) => {
             // to only cache successfull responses
             if (res.statusCode >= 200 && res.statusCode < 300) {
                 //cache the body
-                const miss = await cacheProvider.set(key, JSON.stringify(body), ttl)
+                const miss = cacheProvider.set(key, JSON.stringify(body), ttl)
                     .catch((err) => logger.error("cache write failed", err))
 
             }
