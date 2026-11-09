@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import Otp from './otp.model.js'
+import { toMs } from '../../pkg/utils/time.js';
 
 export function checkHealth() {
     return mongoose.connection.readyState === 1;

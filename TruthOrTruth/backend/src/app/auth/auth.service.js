@@ -40,19 +40,21 @@ export async function register(userData) {
         throw error
     }
 
-    //verify user email [send otp]
+    // => verify user email [send otp]
 
     //generate otp 
     const otp = generateOtp();
 
     //force delete every otp to this user before creating a new one
-    await authRepo.deleteOtp(email)
+    await authRepo.deleteOtp(userData.email)
 
     //save otp into db
     await authRepo.createOtp({ code: otp, email: userData.email })
 
     //send the otp email
-    await sendEmail(userData.email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
+    await sendEmail(userData.email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`).catch(() => {
+        throw new AppError('failed to send email')
+    })
 
     return user
 }
@@ -108,7 +110,9 @@ export async function sendOtp(email) {
     await authRepo.createOtp({ code: otp, email: email })
 
     //send the otp email
-    await sendEmail(email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`)
+    await sendEmail(email, 'Verification Code From Truth Or Truth', `Your OTP Is <h1>${otp}</h1>`).catch(() => {
+        throw new AppError('failed to send email')
+    })
 }
 
 export async function resetPassword(email, newPassword, otpCode) {

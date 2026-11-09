@@ -11,7 +11,6 @@ import { env } from '../config/env.js'
 
 export async function sendEmail(to, subject, html){
    
-
     return await transporter.sendMail({
         from : `"Truth Or Truth" <${process.env.NODEMAILER_EMAIL}>` ,
         to : to,
