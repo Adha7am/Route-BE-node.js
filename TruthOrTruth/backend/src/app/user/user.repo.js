@@ -15,3 +15,7 @@ export async function updateUserByEmail(email, data) {
 export async function getAllUsers(){
     return await User.find({})
 }
+
+export async function findUserById(id){
+    return User.findById(id)
+}
