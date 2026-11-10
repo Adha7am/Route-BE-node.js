@@ -58,6 +58,6 @@ async function shutdown(signal) {
 }
 
 process.on('SIGINT', () => shutdown('SIGINT')) //CTRL+C
-process.on('SIGTERM', () => shutdown('SIGTERM')) //process managers shutdowns 
+process.on('SIGTERM', () => shutdown('SIGTERM')) //process-managers' shutdowns 
 
 server.listen(env.port, () => logger.info(`Server is running on port ${env.port}`));

@@ -7,6 +7,7 @@ export async function sendMessage(req, res, next) {
     const data = validateBody(sendMessageDTO, req.body)
     const {content, receiver} = data
 
+    //getting user id from token via authGuard
     const sender = req.user?.id;
 
     const message = await messageService.sendMessage(content, receiver, sender)

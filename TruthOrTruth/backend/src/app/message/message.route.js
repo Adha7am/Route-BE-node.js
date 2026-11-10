@@ -5,6 +5,7 @@ import { Router } from 'express'
 
 const messageRouter = new Router()
 
-messageRouter.post('/send-message', authGuard, asyncHandler(messageController.sendMessage))
+messageRouter.post('/', asyncHandler(messageController.sendMessage))
+messageRouter.post('/public', authGuard, asyncHandler(messageController.sendMessage))
 
 export default messageRouter
