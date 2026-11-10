@@ -6,13 +6,15 @@ import mongoose from 'mongoose';
 import { cacheProvider } from './lib/cache/init.js';
 
 const app = createApp();
-const server = http.createServer(app);
-/*app.listen() already does this wrapping and returns the server object, and it would work here identically
+/*
+app.listen() already does this wrapping and returns the server object, and it would work here identically
 but generally you would want to create the server explicitly due to :
 1- websockets
 2- server-level settings
 3- https swap without touching the app
-4- seperation and testing */
+4- seperation and testing
+*/
+const server = http.createServer(app);
 
 let shuttingDown = false;
 async function shutdown(signal) {
@@ -22,9 +24,7 @@ async function shutdown(signal) {
     logger.info(`Received ${signal}. Starting graceful shutdown.`);
 
     server.close(async () => {
-
-        logger.info('closed HTTP server');
-
+  
         //disconnecting mongodb
         try {
             await mongoose.disconnect();
@@ -40,18 +40,20 @@ async function shutdown(signal) {
         try {
             await cacheProvider.client.quit()
             logger.info('Redis disconnected successfully');
-
+            
         } catch (error) {
             logger.error('Failed to disconnect from Redis', error);
             process.exitCode = 1;
         }
 
+        logger.info('closed HTTP server');
+        
         //forcing the process to exit with coede 1, if shutdown hangs
         setTimeout(() => {
             logger.error('forced to shutdown after timeout')
             process.exit(1)
         }, 60*1000).unref()
-
+        
     });
 }
 

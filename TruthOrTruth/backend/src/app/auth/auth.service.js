@@ -22,7 +22,7 @@ export function checkHealth() {
 export async function register(userData) {
 
     //check that user does NOT exist AND throw if it does
-    await assertUserDoesNotExist(userData.email)
+    await assertUserDoesNotExist({email : userData.email})
 
     //hash password
     userData.password = await hashPassword(userData.password)
@@ -62,7 +62,7 @@ export async function register(userData) {
 export async function verifyUser(email, code) {
 
     //check that user Exists AND throw if it does not
-    const user = await getUserOrThrow(email)
+    const user = await getUserOrThrow({email})
     //throw error if user is already verified
     if (user.isVerified === true) throw userAlreadyVerified
 
@@ -84,7 +84,7 @@ export async function verifyUser(email, code) {
 export async function login(email, password) {
 
     //check that user Exists AND throw if it does not
-    const user = await getUserOrThrow(email)
+    const user = await getUserOrThrow({email})
 
     //compare password hash
     const match = await comparePassword(password, user.password)
@@ -102,7 +102,7 @@ export async function login(email, password) {
 export async function sendOtp(email) {
 
     //check that user Exists AND throw if it does not
-    await getUserOrThrow(email)
+    await getUserOrThrow({email})
     //generate otp 
     const otp = generateOtp();
 

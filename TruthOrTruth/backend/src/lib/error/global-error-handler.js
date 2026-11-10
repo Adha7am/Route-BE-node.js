@@ -1,4 +1,6 @@
 import { logger } from "../../pkg/logger/logger.js";
+import isProduction from "../utils/NODE_ENV.js";
+
 
 export const globalErrorHandler = (err, req, res, _next) => {
 
@@ -9,7 +11,7 @@ export const globalErrorHandler = (err, req, res, _next) => {
         success: false,
         requestId : req.correlationId,
         message: err.isOperational ? err.message : 'something went wrong',
-        ...(process.env.NODE_ENV !== 'production' && { stack: err.stack })
+        ...( !isProduction && { stack: err.stack })
     });
 
 }

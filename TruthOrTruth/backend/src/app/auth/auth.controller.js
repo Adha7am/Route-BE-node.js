@@ -1,8 +1,10 @@
+import isProduction from '../../lib/utils/NODE_ENV.js';
 import { logger } from '../../pkg/logger/logger.js'
 import { toMs } from "../../pkg/utils/time.js";
 import { validateBody } from "../../pkg/validation/validation.js";
 import { loginDTO, registerDTO, resetPasswordDTO, sendOtpDTO, verifyUserDTO } from "./auth.dto.js";
 import * as authService from "./auth.service.js";
+
 
 export function checkHealth(req, res, next) {
 
@@ -53,7 +55,7 @@ export async function login(req, res, next) {
     res.cookie('access-token', token, {
         httpOnly: true,
         maxAge: toMs.hours(1),
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction,
         sameSite: 'lax',
     })
 

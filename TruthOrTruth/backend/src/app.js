@@ -2,7 +2,7 @@
 import './lib/db/mongoose.js'
 import express from 'express';
 import cors from 'cors'
-import { globalErrorHandler } from './lib/error/error.handler.js';
+import { globalErrorHandler } from './lib/error/global-error-handler.js';
 import { router } from './route.js';
 import { correlationId } from './lib/correlationID/correlationId.js';
 
