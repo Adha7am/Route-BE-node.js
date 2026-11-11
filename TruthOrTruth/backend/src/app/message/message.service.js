@@ -12,5 +12,5 @@ export async function sendMessage(content, receiver, sender) {
 }
 
 export async function getMessagesByReceiver(receiver) {
-    return await messageRepo.getMessagesByReceiver(receiver)
+    return messageRepo.getMessagesByReceiver(receiver)
 }

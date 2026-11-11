@@ -10,7 +10,7 @@ export async function sendMessage(content, receiver, sender) {
 }
 
 export async function getMessagesByReceiver(receiver) {
-    return await Message.find({
+    return Message.find({
         receiver: receiver
     }, {}, {
         populate: { path: 'sender', select: "name" }
