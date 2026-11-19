@@ -1,5 +1,6 @@
 import * as userRepo from './user.repo.js'
 import { userAlreadyExists, userNotFound } from './user.errors.js'
+import { AppError } from '../../lib/error/AppError.js';
 
 export async function getUserOrThrow({ id, email }) {
     const user = id !== undefined
@@ -12,9 +13,9 @@ export async function getUserOrThrow({ id, email }) {
 
 export async function assertUserDoesNotExist({id, email}) {
         const user = id !== undefined
-        ? await userRepo.findUserById(id)
+        ? await userRepo.findUserById(id)   
         : await userRepo.findUserByEmail(email);
 
     if (user) throw new AppError('user already exists', 409)
     return;
-}
+} 

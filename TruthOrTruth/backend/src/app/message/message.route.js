@@ -5,6 +5,7 @@ import { Router } from 'express'
 
 const messageRouter = new Router()
 
+//anon messages dont need auth gaurd
 messageRouter.post('/', asyncHandler(messageController.sendMessage))
 messageRouter.post('/public', authGuard, asyncHandler(messageController.sendMessage))
 messageRouter.get('/get-my-messages', authGuard, asyncHandler(messageController.getMessagesByReceiver))

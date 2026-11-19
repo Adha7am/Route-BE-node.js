@@ -6,16 +6,15 @@ export class RedisCacheProvider{
 
     constructor(config){
         this.client = new Redis({
-            
             host : config.host,
             port : config.port,
-            password : config.password,
             lazyConnect : true,
+            password : config.password,
             maxLoadingRetryTime : 3
         })
 
-        this.client.on('error', (error) => console.log('redis server error : ' + err.message))
-        this.client.connect().catch((error) => console.log('failed to connect to Redis'))
+        this.client.on('error', (error) => console.log(`redis server error :  ${error}`))
+        this.client.connect().catch((error) => console.log(`failed to connect to Redis : ${error}`))
     }
 
     async set(key, value, ttl){

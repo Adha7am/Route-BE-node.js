@@ -37,7 +37,8 @@ const userSchema = new Schema({
         type: String,
         enum: ['male', 'female', 'unknown'],
         default: 'unknown'
-    }
+    },
+    pfp: String
 }, {
     timestamps: true
 });
