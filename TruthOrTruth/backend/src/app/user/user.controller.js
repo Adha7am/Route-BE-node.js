@@ -1,4 +1,3 @@
-import { id } from 'zod/v4/locales'
 import * as userService from './user.service.js'
 
 export async function getAllUsers(req, res, next) {

@@ -1,5 +1,4 @@
 import * as userRepo from './user.repo.js'
-import { userAlreadyExists, userNotFound } from './user.errors.js'
 import { AppError } from '../../lib/error/AppError.js';
 
 export async function getUserOrThrow({ id, email }) {

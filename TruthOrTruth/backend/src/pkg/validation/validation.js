@@ -4,7 +4,7 @@ export function validateBody(dto, body) {
     const result = dto.safeParse(body)
 
     if (!result.success) {
-        /* error.issue = [
+        /* error.issues = [
             {
                 expected: 'string',
                 code: 'invalid_type',
