@@ -12,7 +12,7 @@ import { env } from '../config/env.js'
 export async function sendEmail(to, subject, html){
    
     return transporter.sendMail({
-        from : `"Truth Or Truth" <${process.env.NODEMAILER_EMAIL}>` ,
+        from : `"Truth Or Truth" <${env.nodemailer.user}>` ,
         to : to,
         subject : subject,
         html : html
