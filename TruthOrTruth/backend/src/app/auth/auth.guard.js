@@ -19,7 +19,8 @@ async function authGuard(req, res, next) {
         throw new AppError('Invalid token', 401)
     }
 
-    await getUserOrThrow({ id: payload.id })
+    //unnecessary load ? [db query on every request after jwt verification]
+    // await getUserOrThrow({ id: payload.id })
 
     req.user = payload;
 

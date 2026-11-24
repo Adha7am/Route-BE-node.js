@@ -8,7 +8,13 @@ import { fileValidation } from '../../pkg/multer/fileValidation.js'
 
 const userRouter = new Router()
 
-userRouter.get('/get-all-users',  withCache(), userController.getAllUsers)
-userRouter.patch('/update-pfp', authGuard, requireMultipart, uploadFiles().single('pfp'), asyncHandler(fileValidation()), asyncHandler(userController.updateProfilePic) )
+userRouter.get('/get-all-users', withCache(), userController.getAllUsers)
+
+userRouter.patch('/update-pfp',
+    authGuard,
+    requireMultipart,
+    uploadFiles().single('pfp'),
+    asyncHandler(fileValidation()),
+    asyncHandler(userController.updateProfilePic))
 
 export default userRouter
