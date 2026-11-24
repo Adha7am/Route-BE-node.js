@@ -7,11 +7,11 @@ class Logger {
         return Logger.instance
     }
 
-    log( message, metaData, level = 'log') {
+    log(message, metaData, level = 'log') {
 
-        let data; 
+        let data;
         if (metaData instanceof Error) {
-             data =  {
+            data = {
                 name: metaData.name,
                 message: metaData.message,
                 statusCode: metaData.statusCode ?? metaData.response?.status,
@@ -19,19 +19,19 @@ class Logger {
             }
         }
 
-
-        if (metaData !== null && typeof metaData === 'object') data = metaData;
-
-        data = { data: metaData };
-
-        console.log({ level, message, ...data, timestamp : new Date( Date.now())})
+        if (metaData !== null && typeof metaData === 'object')
+            { data = metaData }
+        else
+            { data = { data: metaData }; }
+        
+        console.log({ level, message, ...data, timestamp: new Date(Date.now()) })
     }
-    
+
     info(msg, metaData) {
-        this.log(  msg, metaData, 'info');
+        this.log(msg, metaData, 'info');
     }
-     error(msg, metaData) {
-        this.log(msg ,metaData, 'error');
+    error(msg, metaData) {
+        this.log(msg, metaData, 'error');
     }
 }
 
