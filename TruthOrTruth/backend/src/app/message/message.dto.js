@@ -6,7 +6,4 @@ export const sendMessageDTO = z.object({
     receiver : z.string().trim().refine((value) => Types.ObjectId.isValid(value))
 })
 
-export const getMessagesByReceiverDTO = z.object({
-    receiver : z.string().trim().refine((value) => Types.ObjectId.isValid(value))
-})
 

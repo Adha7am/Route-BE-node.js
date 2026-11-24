@@ -2,8 +2,10 @@
 // automatically executes dotenv's configuration when the module is loaded.
 import 'dotenv/config';
 import { z } from 'zod'
+import { logger } from '../../pkg/logger/logger.js';
 
 const schema = z.object({
+    CORS_ORIGIN : z.string().trim(),
     PORT: z.coerce.number().int().min(1).max(65535).default(3000),
 
     REDIS_HOST: z.string().trim(),
@@ -22,6 +24,7 @@ const schema = z.object({
 const parsed = schema.parse(process.env)
 
 export const env = {
+    corsOrigin : parsed.CORS_ORIGIN,
     port : parsed.PORT,
     db: {
         mongodbURI: parsed.MONGODB_URI

@@ -18,6 +18,7 @@ export async function updateProfilePic(req, res, next) {
     return res.json({
         message : 'pfp updated successfully',
         success : true,
+        //sanitize this return on production 
         data : req.file,
         user 
     })

@@ -1,5 +1,5 @@
 import { validateBody } from '../../pkg/validation/validation.js'
-import { getMessagesByReceiverDTO, sendMessageDTO } from './message.dto.js'
+import { sendMessageDTO } from './message.dto.js'
 import * as messageService from './message.service.js'
 
 export async function sendMessage(req, res, next) {
