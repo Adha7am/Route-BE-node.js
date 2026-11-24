@@ -94,7 +94,7 @@ export async function loginWithGoogle(req, res, next) {
     const { token, statusCode } = await authService.loginWithGoogle(req.body.credential)
     res.cookie('access-token', token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
+        secure: isProduction,
         sameSite: 'lax',
         maxAge: toMs.hours(1)
     })
