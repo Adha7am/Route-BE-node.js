@@ -5,7 +5,7 @@ export function withCache(ttl = 3600) {
     return async (req, res, next) => {
 
         //to only cache get requests
-        if (req.method !== 'GET') next();
+        if (req.method !== 'GET') return next();
         let key = `${req.method} : ${req.originalUrl}`;
         //check for cached
           const cached = await cacheProvider.get(key).catch((err) => logger.error("cache read failed", err))

@@ -3,23 +3,29 @@ import { AppError } from '../../lib/error/AppError.js'
 import crypto from 'node:crypto'
 import path from 'node:path'
 import { allowedTypes } from "./fileValidation.js";
+import * as fs from 'node:fs'
 
 
-export function requireMultipart (req, res, next ) {
-    if(!req.is('multipart/form-data')) next(new AppError('body must be multipart/form-data', 400))
+export function requireMultipart(req, res, next) {
+    if (!req.is('multipart/form-data')) next(new AppError('body must be multipart/form-data', 400))
     next()
 }
 
 
-export function wuploadFiles(allowed = allowedTypes) {
+export function uploadFiles(allowed = allowedTypes) {
     return multer({
 
-        fileFilter: function (req, file, cb) { 
-            const ext = path.extname(file?.originalname.toLowerCase())
+        fileFilter: function (req, file, cb) {
+            const ext = path.extname(file.originalname.toLowerCase())
 
             // validate mimetype & extension
-            if (allowed[ext] && allowed[ext] === file.mimetype) return cb(null, true)
-            return cb(new AppError('mismatched header or invalid file extension', 400), false)
+            if (!allowed[ext] && allowed[ext] !== file.mimetype) {
+                fs.unlinkSync(file.path)
+                return cb(new AppError('mismatched header or invalid file extension', 400), false)
+            }
+
+            return cb(null, true)
+
         },
 
         storage: diskStorage({

@@ -16,7 +16,7 @@ export const fileValidation = (allowed = allowedTypes) => {
         const type = await fileTypeFromFile(req.file.path)
 
         if (!type || !Object.values(allowed).includes(type.mime)) {
-            fs.unlinkSync(filePath)
+            fs.unlinkSync(req.file.path)
             return next(new AppError('invalid file type', 400))
         }
         next()
