@@ -18,12 +18,9 @@ class Logger {
                 stack: metaData.stack,
             }
         }
+        else if (metaData !== null && typeof metaData === 'object') { data = metaData }
+        else { data = { data: metaData }; }
 
-        if (metaData !== null && typeof metaData === 'object')
-            { data = metaData }
-        else
-            { data = { data: metaData }; }
-        
         console.log({ level, message, ...data, timestamp: new Date(Date.now()) })
     }
 
