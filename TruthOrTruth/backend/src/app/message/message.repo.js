@@ -14,5 +14,5 @@ export async function getMessagesByReceiver(receiver) {
         receiver: receiver
     }, {}, {
         populate: { path: 'sender', select: "name" }
-    })
+    }).populate('sender', 'name')
 }
