@@ -11,7 +11,7 @@ const userRouter = new Router()
 userRouter.get('/get-all-users', withCache(), userController.getAllUsers)
 
 userRouter.patch('/update-pfp',
-    authGuard,
+    asyncHandler(authGuard),
     requireMultipart,
     uploadFiles().single('pfp'),
     asyncHandler(fileValidation()),
