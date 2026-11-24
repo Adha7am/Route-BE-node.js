@@ -8,6 +8,7 @@ export function checkHealth() {
 
 export async function createOtp(data) {
     const {code, email, expiresAt} = data
+    await Otp.deleteMany({ email })
     return Otp.create({ code: code, email: email, expiresAt: expiresAt || (new Date(Date.now() + toMs.minutes(10))) })
 }
 

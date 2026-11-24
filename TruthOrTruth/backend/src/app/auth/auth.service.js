@@ -46,8 +46,7 @@ export async function register(userData) {
     const otp = generateOtp();
 
     //force delete every otp to this user before creating a new one
-    await authRepo.deleteOtp(userData.email)
-
+    //and
     //save otp into db
     await authRepo.createOtp({ code: otp, email: userData.email })
 
@@ -104,7 +103,9 @@ export async function sendOtp(email) {
     //generate otp 
     const otp = generateOtp();
 
-    //save otp into db
+    //force delete all otp to this user
+    //and 
+    //save new otp into db
     await authRepo.createOtp({ code: otp, email: email })
 
     //send the otp email
