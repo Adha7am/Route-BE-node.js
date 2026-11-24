@@ -2,8 +2,6 @@ import { sendEmail } from '../../lib/email/nodemailer.js'
 import * as userRepo from '../user/user.repo.js'
 import * as authRepo from './auth.repo.js'
 import { getUserOrThrow, assertUserDoesNotExist } from '../user/user.helper.js'
-import { userAlreadyExists, userAlreadyVerified, userNotVerified } from '../user/user.errors.js'
-import { expiredOtp, invalidCreds, invalidOtp } from './auth.errors.js'
 import { comparePassword, hashPassword } from '../../pkg/utils/hash.js'
 import { generateToken } from '../../lib/utils/token.js'
 import { verifyGoogleToken } from '../../lib/utils/googleAuth.js'
@@ -34,7 +32,7 @@ export async function register(userData) {
     } catch (error) {
         //catches MongoDB duplicated-key error [race condition]
         if (error.code === 11000) {
-            throw userAlreadyExists
+            throw new AppError('user already exists', 409)
         }
 
         throw error
@@ -61,14 +59,14 @@ export async function verifyUser(email, code) {
     //check that user Exists AND throw if it does not
     const user = await getUserOrThrow({ email })
     //throw error if user is already verified
-    if (user.isVerified === true) throw userAlreadyVerified
+    if (user.isVerified === true) throw new AppError('user is already verified', 400)
 
     //look for otp
     const otp = await authRepo.findOtp(email)
     //throw error if otp doesnt exist
-    if (!otp) throw expiredOtp
+    if (!otp) throw new AppError('OTP Expired, request new OTP', 404)
     //throw error if response otp doesnt match the one in database
-    if (otp.code !== code) throw invalidOtp
+    if (otp.code !== code) throw new AppError('Invalid OTP', 401)
     //update user.isVerified = true
     const verifieduser = await userRepo.updateUserByEmail(email, { isVerified: true })
 
@@ -86,10 +84,10 @@ export async function login(email, password) {
     //compare password hash
     const match = await comparePassword(password, user.password)
     //throw error if password is invalid
-    if (!match) throw invalidCreds
+    if (!match) throw new AppError('Invalid Credentials', 403)
 
     //throw if user email is not verified 
-    if (!user.isVerified) throw userNotVerified
+    if (!user.isVerified) throw new AppError('user is not verified', 403)
 
     //create token
     return generateToken({ id: user._id, name: user.name, email: user.email })
@@ -115,8 +113,8 @@ export async function sendOtp(email) {
 export async function resetPassword(email, newPassword, otpCode) {
     // validate otp
     const otp = await authRepo.findOtp(email)
-    if (!otp) throw expiredOtp
-    if (otp.code !== otpCode) throw invalidCreds
+    if (!otp) throw new AppError('OTP Expired, request new OTP', 404)
+    if (otp.code !== otpCode) throw new AppError('Invalid OTP', 401)
 
     // hash password
     const hashedNewPassword = await hashPassword(newPassword)
